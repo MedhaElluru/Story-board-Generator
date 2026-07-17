@@ -1,0 +1,9 @@
+streamlit
+runwayml
+opencv-python
+moviepy==2.2.1
+python-dotenv
+requests
+numpy
+pillow
+imageio-ffmpeg
