@@ -1,8 +1,8 @@
 # parse script --> image_gen --> build all clips --> build animatic
 
 import os
-from parser import parse_script
-from image_gen import image_gen
+from parser import parse_script, build_character_registry
+from image_gen import image_gen, get_reference_images
 from animatic import build_all_clips, build_animatic
 
 def run_pipeline(script_text: str, output_dir: str, scene_cap: int = None, progress_callback = None):
@@ -10,8 +10,14 @@ def run_pipeline(script_text: str, output_dir: str, scene_cap: int = None, progr
     if scene_cap:
         scenes = scenes[: scene_cap]
 
+    character_registry = build_character_registry(scenes)
+    character_references = get_reference_images(character_registry)
+
+
     frames_dir = f"{output_dir}/frames"
-    failed_scenes = image_gen(scenes, frames_dir, progress_callback=progress_callback)
+    os.makedirs(frames_dir, exist_ok=True)
+    failed_scenes = image_gen(scenes, frames_dir, progress_callback=progress_callback, character_references=character_references, character_registry=character_registry)
+
 
     if failed_scenes:
         scenes = [s for s in scenes if s['scene_number'] not in failed_scenes] #not wasting credits for failed scenes

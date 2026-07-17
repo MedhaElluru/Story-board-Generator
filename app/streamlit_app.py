@@ -48,11 +48,15 @@ def show_live_tab():
             scene_count = len(os.listdir(frames_dir))
 
             with st.expander("View Frames"):
-                    st.subheader("Storyboard Frames")
-                    cols = st.columns(3)
-                    for i in range(1, scene_count+1):
-                        with cols[(i - 1) % 3]:
-                            st.image(f"{frames_dir}/scene_{i:03d}.png", caption=f"Scene {i}")
+                
+                st.subheader("Storyboard Frames")
+                cols = st.columns(3)
+                frame_files = sorted(os.listdir(frames_dir))
+                for idx, filename in enumerate(frame_files):
+                    with cols[idx % 3]:
+                        st.image(f"{frames_dir}/{filename}", caption=filename)
+
+    
 
             st.subheader("Animatic")
             st.video(animatic_path, width = 1000)
